@@ -339,6 +339,29 @@ tr.fixada td { background: var(--sun-soft) !important; }
 .musica button.mudo { color: var(--soft); background: var(--surface2); border-color: var(--line); }
 .musica input[type='range'] { width: 84px; padding: 0; border: 0; accent-color: var(--accent); background: transparent; }
 
+/* ---------- Privacidade (LGPD) ---------- */
+.politica { font-size: 13px; line-height: 1.6; max-height: 42vh; overflow: auto; padding: 4px 12px 4px 2px; }
+.politica h4 { font-family: var(--serif); font-size: 15px; margin: 14px 0 4px; }
+.politica h4:first-child { margin-top: 0; }
+.politica p { margin: 4px 0; }
+.politica ul { margin: 4px 0; padding-left: 20px; }
+.politica-versao { color: var(--soft); font-size: 12px; margin-top: 12px !important; }
+.dica-email { display: flex; gap: 8px; align-items: flex-start; margin: 0; padding: 9px 12px; background: var(--blue-soft); border-left: 4px solid var(--blue); border-radius: 0 10px 10px 0; color: #2f4a70; font-size: 12.5px; line-height: 1.5; }
+.dica-email svg { flex: none; margin-top: 2px; }
+.consentimento { display: flex; flex-direction: column; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.check-consent { display: flex; gap: 9px; align-items: flex-start; font-weight: 500 !important; font-size: 12.5px !important; line-height: 1.5; cursor: pointer; flex-direction: row !important; }
+.check-consent input { margin-top: 3px; width: 16px; height: 16px; flex: none; accent-color: var(--accent); }
+.consentimento details summary { cursor: pointer; font-size: 12.5px; font-weight: 700; color: var(--blue); }
+.consentimento .politica { margin-top: 8px; max-height: 30vh; border-top: 1px solid var(--line); padding-top: 8px; }
+.meus-dados { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; }
+.meus-dados h4 { font-family: var(--serif); font-size: 16px; margin: 0 0 6px; }
+.meus-dados ul { margin: 0 0 8px; padding-left: 20px; line-height: 1.6; }
+button.perigo { color: var(--danger); border-color: #f0cfca; background: var(--danger-soft); }
+button.perigo:hover:not(:disabled) { background: #f4d3ce; border-color: var(--danger); }
+.confirmar-exclusao { margin-top: 10px; background: #fdf3f1; border: 1px solid #f0cfca; border-radius: 12px; padding: 10px 14px; }
+.confirmar-exclusao p { margin: 0 0 8px; line-height: 1.5; }
+.confirmar-exclusao input { width: 100%; margin-bottom: 8px; }
+
 /* ---------- Login e avisos ---------- */
 .form-auth { display: flex; flex-direction: column; gap: 12px; }
 .form-auth label { display: flex; flex-direction: column; gap: 5px; font-weight: 700; font-size: 12.5px; }

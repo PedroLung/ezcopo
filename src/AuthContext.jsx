@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { supabase, configurado } from './supabase'
+import { CONTATO, POLITICA_VERSAO } from './privacidade'
 
 const AuthContext = createContext(null)
 
@@ -62,7 +63,12 @@ export function AuthProvider({ children }) {
     if (e1) return { erro: traduzir(e1) }
     if (!livre) return { erro: 'Este nick já está em uso. Escolha outro.' }
 
-    const { data, error } = await supabase.auth.signUp({ email, password: senha, options: { data: { nick } } })
+    // O aceite da política (data e versão) é gravado no perfil pelo banco. Veja supabase/schema.sql.
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password: senha,
+      options: { data: { nick, consentimento: 'true', politica_versao: POLITICA_VERSAO } },
+    })
     if (error) return { erro: traduzir(error) }
     if (!data.session) return { aviso: 'Conta criada! Confirme seu e-mail para entrar.' }
     return {}
@@ -73,8 +79,20 @@ export function AuthProvider({ children }) {
     setUsuario(null)
   }
 
+  // Apaga a conta do aluno (login, perfil e notas) e encerra a sessão
+  async function excluirConta() {
+    const { error } = await supabase.rpc('excluir_minha_conta')
+    if (error) {
+      console.error('Erro ao excluir conta:', error)
+      return { erro: `Não foi possível excluir agora. Tente de novo ou fale com ${CONTATO}.` }
+    }
+    await supabase.auth.signOut({ scope: 'local' })
+    setUsuario(null)
+    return {}
+  }
+
   return (
-    <AuthContext.Provider value={{ configurado, usuario, carregando, entrar, cadastrar, sair }}>
+    <AuthContext.Provider value={{ configurado, usuario, carregando, entrar, cadastrar, sair, excluirConta }}>
       {children}
     </AuthContext.Provider>
   )

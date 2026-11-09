@@ -18,6 +18,10 @@ create table if not exists public.profiles (
 -- nick único, sem diferenciar maiúsculas de minúsculas
 create unique index if not exists profiles_nick_unico on public.profiles (lower(nick));
 
+-- registro do consentimento (LGPD): quando o aluno aceitou a política e qual versão
+alter table public.profiles add column if not exists aceitou_em timestamptz;
+alter table public.profiles add column if not exists politica_versao text;
+
 -- melhor nota de cada aluno em cada fase
 create table if not exists public.resultados (
   user_id       uuid not null references public.profiles (id) on delete cascade,
@@ -61,10 +65,12 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, nick)
+  insert into public.profiles (id, nick, aceitou_em, politica_versao)
   values (
     new.id,
-    coalesce(nullif(trim(new.raw_user_meta_data ->> 'nick'), ''), split_part(new.email, '@', 1))
+    coalesce(nullif(trim(new.raw_user_meta_data ->> 'nick'), ''), split_part(new.email, '@', 1)),
+    case when (new.raw_user_meta_data ->> 'consentimento') = 'true' then now() end,
+    new.raw_user_meta_data ->> 'politica_versao'
   );
   return new;
 end
@@ -153,6 +159,22 @@ begin
 end
 $$;
 
+-- o próprio aluno apaga a conta (LGPD: direito à eliminação). Apaga o login, o perfil e as notas.
+create or replace function public.excluir_minha_conta()
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if auth.uid() is null then
+    raise exception 'não autenticado';
+  end if;
+  -- profiles e resultados são apagados em cascata
+  delete from auth.users where id = auth.uid();
+end
+$$;
+
 -- 5) PERMISSÕES DAS FUNÇÕES ---------------------------------------------------
 
 revoke all on function public.registrar_nota(text, int) from public, anon;
@@ -162,6 +184,8 @@ grant execute on function public.registrar_nota(text, int) to authenticated;
 grant execute on function public.ranking()                 to authenticated;
 grant execute on function public.painel_professor()        to authenticated;
 grant execute on function public.nick_disponivel(text)     to anon, authenticated;
+revoke all on function public.excluir_minha_conta() from public, anon;
+grant execute on function public.excluir_minha_conta() to authenticated;
 
 -- 6) COMO TORNAR A PROFESSORA "PROFESSOR" ----------------------------------------
 -- Primeiro a professora cria a conta normalmente no jogo (com o nick dela).

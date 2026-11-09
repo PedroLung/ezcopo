@@ -1,6 +1,6 @@
 import {
   Play, Trophy, ClipboardList, CircleHelp, BookOpen, LogOut, User, ArrowLeft,
-  Mail, Search, Pin, ClipboardCheck, TriangleAlert, ListChecks, Lock, CircleCheck, RotateCcw,
+  Mail, Search, Pin, ClipboardCheck, TriangleAlert, ListChecks, Lock, CircleCheck, RotateCcw, ShieldCheck,
 } from 'lucide-react'
 import { useGame } from '../GameContext'
 import { useAuth } from '../AuthContext'
@@ -8,9 +8,11 @@ import { CASOS } from '../cases'
 import FormAuth from './FormAuth'
 import Ranking from './Ranking'
 import Professor from './Professor'
+import TextoPrivacidade from './TextoPrivacidade'
+import MeusDados from './MeusDados'
 import { problemaConfig } from '../supabase'
 
-const LARGURA = { null: 460, auth: 440, fases: 540, como: 520, livro: 560, ranking: 520, professor: 920 }
+const LARGURA = { null: 460, auth: 480, fases: 540, privacidade: 620, como: 520, livro: 560, ranking: 520, professor: 920 }
 
 function Voltar({ onClick }) {
   return <button className="voltar" onClick={onClick}><ArrowLeft size={15} /> Voltar</button>
@@ -71,6 +73,7 @@ export default function Menu() {
                 {professor && <button onClick={() => setPainel('professor')}><ClipboardList size={16} /> Painel da professora</button>}
                 <button onClick={() => setPainel('como')}><CircleHelp size={16} /> Como jogar</button>
                 <button onClick={() => setPainel('livro')}><BookOpen size={16} /> Base no livro</button>
+                <button onClick={() => setPainel('privacidade')}><ShieldCheck size={16} /> Privacidade{usuario ? ' e meus dados' : ''}</button>
                 {usuario && <button className="discreto" onClick={sair}><LogOut size={15} /> Sair da conta</button>}
               </div>
             </>
@@ -116,6 +119,15 @@ export default function Menu() {
                   )
                 })}
               </ul>
+              <Voltar onClick={() => setPainel(null)} />
+            </div>
+          )}
+
+          {painel === 'privacidade' && (
+            <div className="menu-painel">
+              <h3><ShieldCheck size={18} /> Privacidade</h3>
+              <TextoPrivacidade />
+              {usuario && <MeusDados aoExcluir={() => setPainel(null)} />}
               <Voltar onClick={() => setPainel(null)} />
             </div>
           )}
