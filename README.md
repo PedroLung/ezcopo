@@ -85,6 +85,12 @@ npm run dev
 
 Sem o `.env.local`, o jogo roda como visitante: tudo funciona, mas as notas não são salvas.
 
+### Privacidade (LGPD)
+
+O jogo tem política de privacidade, aceite obrigatório no cadastro e a tela **Privacidade e meus dados**, onde o aluno baixa seus dados e exclui a conta. O aceite (data e versão) é gravado no perfil.
+Para preencher o contato e o prazo de guarda que aparecem no aviso, defina `VITE_CONTATO_PRIVACIDADE` e `VITE_PRAZO_DADOS` no `.env.local` (veja `.env.example`).
+Ao mudar o texto da política de forma importante, aumente `POLITICA_VERSAO` em `src/privacidade.js`.
+
 ### Scripts
 
 | Comando | O que faz |

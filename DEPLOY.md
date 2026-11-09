@@ -4,7 +4,9 @@ O jogo é um site estático (HTML, CSS e JavaScript). O banco e o login ficam no
 
 ## Antes de publicar (checklist)
 - [ ] `.env.local` com a URL do projeto e a chave **pública** (`sb_publishable_...` ou `anon`). Nunca a chave secreta.
-- [ ] SQL de `supabase/schema.sql` rodado no Supabase.
+- [ ] SQL de `supabase/schema.sql` rodado no Supabase (rode de novo se o arquivo foi atualizado: é seguro repetir).
+- [ ] `VITE_CONTATO_PRIVACIDADE` e `VITE_PRAZO_DADOS` preenchidos (contato e prazo que aparecem na política de privacidade).
+- [ ] Região do projeto Supabase conferida (de preferência São Paulo).
 - [ ] "Confirm email" desligado no Supabase (Authentication > Providers > Email).
 - [ ] (Opcional) música própria em `public/audio/musica.mp3`. Sem ela, o jogo usa a trilha ambiente gerada por ele.
 - [ ] Jogo testado localmente com `npm run dev`.
@@ -26,6 +28,7 @@ O jogo é um site estático (HTML, CSS e JavaScript). O banco e o login ficam no
 3. Antes de clicar em Deploy, em **Environment Variables**, cadastre:
    - `VITE_SUPABASE_URL` = a URL do projeto Supabase
    - `VITE_SUPABASE_ANON_KEY` = a chave pública (publishable/anon)
+   - `VITE_CONTATO_PRIVACIDADE` e `VITE_PRAZO_DADOS` = contato e prazo de guarda dos dados (aparecem na política de privacidade)
 4. Clique em Deploy. A cada `git push`, o site atualiza.
 
 ## Depois de publicar
