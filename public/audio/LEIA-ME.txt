@@ -1,0 +1,16 @@
+PASTA DE AUDIO
+
+O jogo nao usa mais voz: os pedidos do Ricardo agora sao e-mails de texto.
+Os arquivos chefe-*.m4a que existirem aqui nao sao mais usados e podem ser apagados.
+
+MUSICA DE FUNDO (opcional)
+   Para usar uma musica sua, salve aqui com o nome:
+        musica.mp3
+   Ela toca em loop. Se esse arquivo NAO existir, o jogo toca uma trilha ambiente
+   gerada por ele mesmo (original, sem direitos autorais).
+   ATENCAO: use so musica livre de direitos (ou sua) e leia a licenca. Algumas pedem credito
+   ao autor; se pedirem, coloque o credito na apresentacao.
+
+EFEITOS SONOROS
+   Sao gerados pelo proprio jogo (nao precisam de arquivos). O botao de sino, no canto
+   inferior direito, liga e desliga.
