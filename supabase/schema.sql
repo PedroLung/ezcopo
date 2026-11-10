@@ -18,6 +18,11 @@ create table if not exists public.profiles (
 -- nick único, sem diferenciar maiúsculas de minúsculas
 create unique index if not exists profiles_nick_unico on public.profiles (lower(nick));
 
+-- segurança: o nick só pode ter letras, números e _ (3 a 20 caracteres), mesmo que alguém
+-- tente cadastrar direto pela API, sem passar pelo jogo. "not valid" não mexe em contas antigas.
+alter table public.profiles drop constraint if exists profiles_nick_valido;
+alter table public.profiles add constraint profiles_nick_valido check (nick ~ '^[A-Za-z0-9_]{3,20}$') not valid;
+
 -- registro do consentimento (LGPD): quando o aluno aceitou a política e qual versão
 alter table public.profiles add column if not exists aceitou_em timestamptz;
 alter table public.profiles add column if not exists politica_versao text;
@@ -64,13 +69,20 @@ language plpgsql
 security definer
 set search_path = public
 as $$
+declare
+  v_nick text := trim(coalesce(new.raw_user_meta_data ->> 'nick', ''));
 begin
+  -- nick inválido (por exemplo, cadastro feito direto pela API): gera um nick seguro
+  if v_nick !~ '^[A-Za-z0-9_]{3,20}$' then
+    v_nick := 'jogador_' || substr(md5(new.id::text), 1, 6);
+  end if;
+
   insert into public.profiles (id, nick, aceitou_em, politica_versao)
   values (
     new.id,
-    coalesce(nullif(trim(new.raw_user_meta_data ->> 'nick'), ''), split_part(new.email, '@', 1)),
+    v_nick,
     case when (new.raw_user_meta_data ->> 'consentimento') = 'true' then now() end,
-    new.raw_user_meta_data ->> 'politica_versao'
+    left(new.raw_user_meta_data ->> 'politica_versao', 20)
   );
   return new;
 end
