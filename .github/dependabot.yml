@@ -1,11 +1,21 @@
-# Atualizações automáticas de dependências: o GitHub abre um pull request quando sai
-# uma versão nova ou uma correção de segurança de qualquer pacote do projeto.
+# Atualizações automáticas de dependências.
+# O GitHub abre pull requests quando sai uma versão nova de algum pacote.
 version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
+      interval: "monthly"
+    open-pull-requests-limit: 3
     commit-message:
       prefix: "chore(deps)"
+    # Mudanças grandes (major) quebram o projeto com facilidade: React e React-DOM, ou Vite e o
+    # plugin do React, precisam subir juntos e ser testados. Aqui aceitamos só versões menores
+    # e correções. Para subir uma versão major, faça isso à mão, numa branch.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    # Junta as atualizações pequenas num único pull request, em vez de um por pacote.
+    groups:
+      menores-e-correcoes:
+        update-types: ["minor", "patch"]
