@@ -55,7 +55,7 @@ export const fase1 = {
       id: 'relatorio',
       titulo: 'Entregue o Relatório de Auditoria',
       app: 'relatorio',
-      detalhe: 'Responda as 5 perguntas. Suas provas do Caderno aparecem para você marcar.',
+      detalhe: 'Responda as 5 perguntas. As provas que você fixou entram no relatório sozinhas.',
       dica: 'Use a Biblioteca de Normas para responder.',
       feito: (e) => e.entregue,
     },
@@ -145,7 +145,7 @@ export const fase1 = {
       {
         id: 'provas', tipo: 'evidencias', peso: 40,
         titulo: 'Quais afirmações do memorando estão erradas?',
-        ajuda: 'Marque, entre as que você fixou, as que contrariam a norma. Marcar afirmações corretas tira nota.',
+        ajuda: 'As afirmações que você fixou no memorando entram aqui sozinhas. Fixe só as que contrariam a norma: fixar afirmações corretas tira nota.',
         correto: ['memo:M2', 'memo:M3', 'memo:M5', 'memo:M7'],
         minimo: 4,
         explicacao:

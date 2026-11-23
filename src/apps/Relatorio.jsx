@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Check, CircleCheck, CircleX, ArrowRight, ArrowLeft, RotateCcw, Flag, Send } from 'lucide-react'
+import { Check, CircleCheck, CircleX, ArrowRight, ArrowLeft, RotateCcw, Flag, Send, X } from 'lucide-react'
 import { useGame } from '../GameContext'
 import { corrigir, respostasVazias } from '../grade'
 import { tocar } from '../som/efeitos'
@@ -22,20 +22,24 @@ function Campo({ numero, titulo, ajuda, feito, children }) {
 }
 
 export default function Relatorio() {
-  const { caso, fixados, marcarEntregue, temProximo, proximoCaso, registrarNota, setResumoAberto } = useGame()
+  const { caso, fixados, alternarFixo, marcarEntregue, temProximo, proximoCaso, registrarNota, setResumoAberto } = useGame()
   const campos = caso.relatorio.campos
   const [resp, setResp] = useState(() => respostasVazias(caso))
   const [resultado, setResultado] = useState(null)
 
-  const preenchido = (c) => (c.tipo === 'select' ? resp[c.id] !== '' : resp[c.id].length > 0)
+  // Nas perguntas de evidências, a resposta é o que o jogador fixou (no quadro certo): não precisa marcar de novo
+  const fixadosDoCampo = (c) => fixados.filter((f) => !c.filtro || f.tipo === c.filtro)
+
+  const preenchido = (c) => {
+    if (c.tipo === 'evidencias') return fixadosDoCampo(c).length > 0
+    return c.tipo === 'select' ? resp[c.id] !== '' : resp[c.id].length > 0
+  }
   const completo = campos.every(preenchido)
 
   function enviar(e) {
     e.preventDefault()
-    // Evidência removida do Caderno depois de marcada não conta
-    const ids = fixados.map((f) => f.id)
     const limpa = { ...resp }
-    for (const c of campos) if (c.tipo === 'evidencias') limpa[c.id] = resp[c.id].filter((id) => ids.includes(id))
+    for (const c of campos) if (c.tipo === 'evidencias') limpa[c.id] = fixadosDoCampo(c).map((f) => f.id)
     const r = corrigir(limpa, caso)
     tocar(r.total >= 70 ? 'sucesso' : 'regular')
     setResultado(r)
@@ -110,19 +114,19 @@ export default function Relatorio() {
 
           {c.tipo === 'evidencias' && (
             <>
-              {fixados.filter((f) => !c.filtro || f.tipo === c.filtro).length === 0 && (
-                <p className="vazio">Você ainda não fixou nenhum item desta pergunta. Volte ao quadro certo e use "Fixar" nas linhas importantes.</p>
+              {fixadosDoCampo(c).length === 0 && (
+                <p className="vazio">Você ainda não fixou nenhum item. Volte ao quadro certo e use "Fixar" nas linhas que respondem esta pergunta.</p>
               )}
-              {fixados.filter((f) => !c.filtro || f.tipo === c.filtro).map((f) => (
-                <label key={f.id} className="check">
-                  <input
-                    type="checkbox"
-                    checked={resp[c.id].includes(f.id)}
-                    onChange={() => setResp({ ...resp, [c.id]: alternar(resp[c.id], f.id) })}
-                  />
-                  <span><code>{f.id}</code> {f.resumo}</span>
-                </label>
-              ))}
+              <ul className="evidencias-lista">
+                {fixadosDoCampo(c).map((f) => (
+                  <li key={f.id}>
+                    <span><code>{f.id}</code> {f.resumo}</span>
+                    <button type="button" className="btn-pequeno" data-som="desfixar" onClick={() => alternarFixo(f)} aria-label="Remover evidência">
+                      <X size={13} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </>
           )}
         </Campo>

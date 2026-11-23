@@ -93,7 +93,7 @@ export const fase2 = {
       {
         id: 'obrigatorios', tipo: 'evidencias', filtro: 'aud', peso: 25,
         titulo: 'Quem entra obrigatoriamente no programa de 2026?',
-        ajuda: 'Marque, entre os auditores que você fixou, só os que a norma obriga a revisar. Marcar quem não é obrigatório tira nota.',
+        ajuda: 'Os auditores que você fixou no quadro entram aqui sozinhos. Fixe só os que a norma obriga a revisar: fixar quem não é obrigatório tira nota.',
         correto: ['aud:A01', 'aud:A02', 'aud:A03', 'aud:A04'],
         minimo: 4,
         explicacao:
@@ -130,7 +130,7 @@ export const fase2 = {
       {
         id: 'irregulares', tipo: 'evidencias', filtro: 'prz', peso: 35,
         titulo: 'Quais atos e prazos do registro estão irregulares?',
-        ajuda: 'Marque, entre os que você fixou, só os que contrariam a norma. Marcar registros corretos tira nota.',
+        ajuda: 'Os registros que você fixou entram aqui sozinhos. Fixe só os que contrariam a norma: fixar registros corretos tira nota.',
         correto: ['prz:P1', 'prz:P3', 'prz:P5', 'prz:P7'],
         minimo: 4,
         explicacao:
