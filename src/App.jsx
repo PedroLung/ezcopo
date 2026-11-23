@@ -77,7 +77,7 @@ export default function App() {
   if (tela === 'menu' || (configurado && !usuario)) return <Menu />
 
   return (
-    <div className="desktop">
+    <div className={caso.tutorial ? 'desktop com-missoes' : 'desktop'}>
       <div
         className="icones"
         style={{ gridTemplateRows: `repeat(${linhas}, auto)`, width: larguraIcones }}
@@ -125,13 +125,18 @@ export default function App() {
       })}
 
       <div className="barra-tarefas">
-        <button className="iniciar" onClick={() => setTela('menu')}><LayoutGrid size={16} /> Menu</button>
-        <button onClick={() => setIntro(true)}><CircleHelp size={16} /> Ajuda</button>
-        <button onClick={() => setResumoAberto(true)}><Flag size={16} /> Resumo</button>
+        <button className="iniciar" onClick={() => setTela('menu')} aria-label="Menu"><LayoutGrid size={16} /> <span className="rotulo">Menu</span></button>
+        <button onClick={() => setIntro(true)} aria-label="Ajuda"><CircleHelp size={16} /> <span className="rotulo">Ajuda</span></button>
+        <button onClick={() => setResumoAberto(true)} aria-label="Resumo"><Flag size={16} /> <span className="rotulo">Resumo</span></button>
         <div className="tarefas">
           {janelas.map((j) => (
-            <button key={j.id} className={j.minimizada ? '' : 'ativa'} onClick={() => (j.minimizada ? minimizar(j.id) : focar(j.id))}>
-              <Icone nome={j.id} tamanho={22} /> {NOMES[j.id]}
+            <button
+              key={j.id}
+              className={j.minimizada ? '' : 'ativa'}
+              aria-label={NOMES[j.id]}
+              onClick={() => (j.minimizada ? minimizar(j.id) : focar(j.id))}
+            >
+              <Icone nome={j.id} tamanho={22} /> <span className="rotulo">{NOMES[j.id]}</span>
             </button>
           ))}
         </div>

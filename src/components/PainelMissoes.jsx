@@ -7,7 +7,8 @@ import { useGame } from '../GameContext'
 export default function PainelMissoes({ nomeApps }) {
   const { missoes, missaoAtual, abrir } = useGame()
   const [dica, setDica] = useState(false)
-  const [recolhido, setRecolhido] = useState(false)
+  // No celular o painel começa recolhido, para não cobrir a tela
+  const [recolhido, setRecolhido] = useState(() => window.matchMedia('(max-width: 820px)').matches)
   const feitas = missoes.filter((m) => m.concluida).length
 
   // "Ding" cada vez que uma missão é concluída
