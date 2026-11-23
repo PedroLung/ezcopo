@@ -138,7 +138,7 @@ export const fase3 = {
       {
         id: 'irregulares', tipo: 'evidencias', filtro: 'ato', peso: 50,
         titulo: 'Quais atos do quadro são irregulares?',
-        ajuda: 'Marque, entre os atos que você fixou, só os que contrariam a norma. Marcar atos corretos tira nota.',
+        ajuda: 'Os atos que você fixou entram aqui sozinhos. Fixe só os que contrariam a norma: fixar atos corretos tira nota.',
         correto: ['ato:T2', 'ato:T3', 'ato:T5', 'ato:T6', 'ato:T7', 'ato:T8'],
         minimo: 6,
         explicacao:
